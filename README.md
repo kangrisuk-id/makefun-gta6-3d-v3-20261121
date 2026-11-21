@@ -1,6 +1,6 @@
-[![status](https://make.fun/api/entries/gta6-01/kangrisuk-id/makefun-gta6-3d-v3-20261121/badge/status.svg)](https://make.fun/bounty/gta6-01)
-[![check](https://make.fun/api/entries/gta6-01/kangrisuk-id/makefun-gta6-3d-v3-20261121/badge/check.svg)](https://make.fun/bounty/gta6-01)
-[![score](https://make.fun/api/entries/gta6-01/kangrisuk-id/makefun-gta6-3d-v3-20261121/badge/score.svg)](https://make.fun/bounty/gta6-01)
+[![make.fun · gta6-01](https://make.fun/badge/gta6-01.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![rank](https://make.fun/badge/gta6-01/kangrisuk-id/makefun-gta6-3d-v3-20261121/rank.svg)](https://make.fun/bounty/gta6-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![reward](https://make.fun/badge/gta6-01/kangrisuk-id/makefun-gta6-3d-v3-20261121/reward.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
 
 # 🌴 Palmera Bay: Vice Run 3D
 
