@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Palmera Bay: Vice Run 3D</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #160b12; font-family: "Segoe UI", system-ui, sans-serif; }
+  #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  #status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .panel { position: fixed; color: #fff; background: rgba(12,10,18,.72); border: 1px solid rgba(255,255,255,.16);
+           border-radius: 10px; padding: 8px 12px; backdrop-filter: blur(3px); z-index: 5; }
+  #stats { top: 14px; left: 14px; min-width: 168px; }
+  #cash { color: #57e389; font-size: 24px; font-weight: 800; letter-spacing: .5px; }
+  #respect { color: #ffd75e; font-size: 12px; font-weight: 700; float: right; margin-top: 7px; }
+  #healthwrap { height: 9px; background: #3a1420; border-radius: 5px; margin: 6px 0 4px; overflow: hidden; }
+  #health { height: 100%; width: 100%; background: linear-gradient(90deg,#ff4d6d,#ff7a5c); border-radius: 5px; }
+  #mode { font-size: 11px; color: #cfd6e4; letter-spacing: 1px; }
+  #wanted { top: 14px; right: 14px; text-align: right; min-width: 150px; }
+  #stars { font-size: 24px; color: #ffd75e; letter-spacing: 3px; text-shadow: 0 0 8px rgba(255,180,0,.6); }
+  #stars .off { color: rgba(255,255,255,.22); text-shadow: none; }
+  #district { font-size: 12px; color: #ffb37a; margin-top: 2px; }
+  #policestat { font-size: 10px; color: #9fb4d8; letter-spacing: 1px; }
+  #mission { top: 118px; left: 50%; transform: translateX(-50%); text-align: center; max-width: 520px; }
+  #mission h3 { margin: 0 0 2px; font-size: 13px; color: #ffd75e; letter-spacing: 2px; }
+  #mission p { margin: 0; font-size: 14px; }
+  #mission .dist { color: #7ae0ff; font-size: 12px; }
+  #phone { bottom: 178px; left: 14px; max-width: 300px; background: rgba(10,16,22,.85); border-left: 4px solid #57e389; display: none; }
+  #phone .from { color: #57e389; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+  #phone p { margin: 3px 0 0; font-size: 13px; line-height: 1.35; }
+  #banner { top: 34%; left: 50%; transform: translateX(-50%); text-align: center; display: none; z-index: 8;
+            background: none; border: none; }
+  #banner h1 { margin: 0; font-size: 44px; color: #ffd75e; text-shadow: 0 3px 18px rgba(0,0,0,.8); letter-spacing: 3px; }
+  #banner p { margin: 4px 0 0; font-size: 18px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.9); }
+  #minimap { position: fixed; right: 14px; bottom: 14px; width: 196px; height: 150px; z-index: 5;
+             border: 2px solid rgba(255,255,255,.25); border-radius: 10px; background: #0d1520; }
+  #speedo { bottom: 178px; right: 14px; text-align: right; display: none; }
+  #speedo .v { font-size: 30px; font-weight: 800; }
+  #speedo .u { font-size: 11px; color: #cfd6e4; }
+  #weapon { bottom: 14px; left: 14px; }
+  #weapon .wname { font-size: 12px; letter-spacing: 2px; color: #ffd75e; }
+  #weapon .ammo { font-size: 22px; font-weight: 800; }
+  #cross { position: fixed; left: 50%; top: 50%; transform: translate(-50%,-50%); color: rgba(255,255,255,.85);
+           font-size: 20px; z-index: 4; text-shadow: 0 0 6px #000; pointer-events: none; }
+  .overlay { position: fixed; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center;
+             justify-content: center; text-align: center; color: #fff; }
+  #title { background: linear-gradient(180deg, rgba(24,6,18,.28) 0%, rgba(24,6,18,.04) 42%, rgba(10,6,16,.5) 100%); }
+  #title h1 { margin: 0; font-size: 74px; font-weight: 900; letter-spacing: 4px; color: #ffd21f;
+              text-shadow: 0 4px 0 #e2543e, 0 10px 34px rgba(0,0,0,.65); }
+  #title h2 { margin: 2px 0 0; font-size: 30px; letter-spacing: 14px; color: #ff5e8a; text-shadow: 0 3px 16px rgba(0,0,0,.7); }
+  #title .story { margin-top: 252px; max-width: 640px; font-size: 16px; line-height: 1.45; text-shadow: 0 2px 10px #000; }
+  #title .controls { margin-top: 10px; font-size: 13px; color: #ffe9c9; text-shadow: 0 1px 6px #000; line-height: 1.7; }
+  #title .go { margin-top: 14px; font-size: 22px; font-weight: 800; color: #57e389; letter-spacing: 2px;
+               text-shadow: 0 2px 12px #000; animation: pulse 1.4s infinite; }
+  @keyframes pulse { 50% { opacity: .45; } }
+  #endcard { background: rgba(8,4,10,.55); display: none; }
+  #endcard h1 { font-size: 64px; margin: 0; letter-spacing: 8px; }
+  #endcard p { font-size: 17px; }
+  #pause { background: rgba(8,4,10,.6); display: none; }
+  #pause h1 { letter-spacing: 6px; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<canvas id="game" aria-label="Palmera Bay: Vice Run 3D — a third-person open-world crime game"></canvas>
+<p id="status" role="status" aria-live="polite"></p>
+
+<div id="hud" style="display:none">
+  <div class="panel" id="stats"><span id="cash">$250</span><span id="respect">RESPECT ★ 0</span>
+    <div id="healthwrap"><div id="health"></div></div><div id="mode">ON FOOT</div></div>
+  <div class="panel" id="wanted"><div id="stars"></div><div id="district">Downtown Palmera</div><div id="policestat"></div></div>
+  <div class="panel" id="mission"><h3 id="mtitle">FREE ROAM</h3><p id="mtext">Explore Palmera Bay</p><p class="dist" id="mdist"></p></div>
+  <div class="panel" id="phone"><div class="from">📱 MARISOL VEGA</div><p id="phonetext"></p></div>
+  <div class="panel" id="banner"><h1 id="bannerh"></h1><p id="bannerp"></p></div>
+  <div class="panel" id="speedo"><span class="v" id="speedv">0</span> <span class="u">km/h</span></div>
+  <div class="panel" id="weapon"><div class="wname">PISTOL</div><span class="ammo" id="ammo">12 / ∞</span></div>
+  <canvas id="minimap" width="196" height="150"></canvas>
+  <div id="cross">＋</div>
+</div>
+
+<div class="overlay" id="title">
+  <h1>PALMERA BAY</h1><h2>— VICE RUN 3D —</h2>
+  <p class="story">Courier <b>Rio Solano</b> takes one last chain of jobs for fixer <b>Marisol Vega</b> in a
+    sun-soaked coastal city. Steal cars, run packages, outrun the law — and retire on the bay.</p>
+  <p class="controls">WASD — move &amp; drive &nbsp;·&nbsp; Shift — sprint &nbsp;·&nbsp; Mouse — orbit camera, Click — shoot<br>
+    E / F — enter &amp; exit cars (carjack!) &nbsp;·&nbsp; R — reload &nbsp;·&nbsp; Esc / P — pause &nbsp;·&nbsp; M — mute</p>
+  <p class="go" id="goprompt">CLICK or press N — NEW GAME</p>
+</div>
+
+<div class="overlay" id="endcard"><h1 id="endh">WASTED</h1><p id="endp"></p><p>Respawning at Clínica del Sol…</p></div>
+<div class="overlay" id="pause"><h1>PAUSED</h1><p>Esc / P — resume</p></div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
